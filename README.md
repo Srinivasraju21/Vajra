@@ -138,3 +138,6 @@ examples/
 ## Licence
 
 This project is currently under active development.
+
+git add .
+git commit -m "docs: add initial Project Vajra README"
