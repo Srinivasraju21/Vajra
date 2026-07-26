@@ -12,7 +12,7 @@ This makes the system modular and easy to extend.
 
 # Import the File System capability.
 from vajra.capabilities.filesystem.file_manager import FileManager
-
+from vajra.capabilities.system.system_manager import SystemManager
 
 class CapabilityRegistry:
     """
@@ -26,7 +26,8 @@ class CapabilityRegistry:
 
         # Dictionary containing capability name → capability object.
         self.capabilities = {
-            "filesystem": FileManager()
+            "filesystem": FileManager(),
+            "system": SystemManager(),
         }
 
     def get_capability(self, capability_name):

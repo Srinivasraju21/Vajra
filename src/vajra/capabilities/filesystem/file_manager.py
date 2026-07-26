@@ -1,56 +1,53 @@
 """
 File System Capability
 
-This module provides Vajra with the ability to interact
+Provides Vajra with the ability to interact
 with the local file system.
-
-Current features:
-- Create directories
-
-Future features:
-- Create files
-- Read files
-- Write files
-- Copy files
-- Move files
-- Delete files
 """
 
-# Import Python's built-in operating system library.
-# It provides functions for interacting with files and directories.
 import os
 
-# Import the base Capability class.
 from vajra.capabilities.capability import Capability
 
 
 class FileManager(Capability):
     """
-    File System Capability.
-
-    Handles file and directory operations for Vajra.
+    Handles all file system operations.
     """
 
     def __init__(self):
-        # Initialise the parent Capability class.
-        super().__init__("File System")
+        """
+        Initialise the File System capability.
+        """
+        super().__init__("filesystem")
+
+    def execute(self, task):
+        """
+        Execute a filesystem task.
+
+        Parameters:
+            task: Task object.
+
+        Returns:
+            Result of the executed operation.
+        """
+
+        if task.action == "create_directory":
+
+            return self.create_directory(
+                task.parameters["directory_name"]
+            )
+
+        return f"Unsupported filesystem action: {task.action}"
 
     def create_directory(self, directory_name):
         """
-        Creates a directory if it does not already exist.
-
-        Parameters:
-            directory_name (str): Name or path of the directory.
-
-        Returns:
-            str: Status message.
+        Create a directory if it does not exist.
         """
 
-        # Check whether the directory already exists.
         if os.path.exists(directory_name):
             return f"Directory already exists: {directory_name}"
 
-        # Create the directory.
         os.makedirs(directory_name)
 
         return f"Directory created successfully: {directory_name}"

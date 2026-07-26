@@ -1,51 +1,52 @@
 """
-Planner Module
+Planner
 
-The Planner converts a Goal into an execution plan.
-
-Future responsibilities:
-- Task decomposition
-- Reasoning
-- Prioritization
-- Dependency management
+The Planner converts a Goal into a sequence of executable
+Task objects.
 """
+
+# Import the Task class.
+from vajra.core.task.task import Task
 
 
 class Planner:
     """
-    Responsible for creating execution plans
-    from Vajra Goals.
+    Generates execution plans from Goals.
     """
 
     def create_plan(self, goal):
         """
-        Converts a Goal object into a list of tasks.
+        Create an execution plan for a goal.
 
-        Example:
+        Parameters:
+            goal: Goal object.
 
-        Goal:
-        "Create a project report"
-
-        Output:
-        [
-            "Understand requirements",
-            "Collect information",
-            "Generate report"
-        ]
+        Returns:
+            list[Task]: Ordered list of executable tasks.
         """
 
-        # Store the goal objective
-        objective = goal.objective
-
-        # Create initial task plan.
-        # In future versions this will be generated
-        # dynamically using AI reasoning models.
         plan = [
-            f"Understand goal: {objective}",
-            "Identify required resources",
-            "Execute required actions",
-            "Validate final result"
+
+            # Step 1: Prepare the environment.
+            Task(
+                action="prepare_environment",
+                capability="system",
+            ),
+
+            # Step 2: Create the project workspace.
+            Task(
+                action="create_directory",
+                capability="filesystem",
+                parameters={
+                    "directory_name": "vajra_workspace"
+                }
+            ),
+
+            # Step 3: Validate execution.
+            Task(
+                action="validate_execution",
+                capability="system",
+            )
         ]
 
-        # Return the generated execution plan
         return plan
