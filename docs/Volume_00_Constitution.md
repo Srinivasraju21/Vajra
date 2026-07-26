@@ -246,8 +246,6 @@ Release
 Volume 00 | Constitution | 🟢 In Progress
 
 
-# Project Vajra
-
 # Master Architecture Index
 
 **Document ID:** VAJRA-000
