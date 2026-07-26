@@ -244,3 +244,148 @@ Release
 
 
 Volume 00 | Constitution | 🟢 In Progress
+
+
+# Project Vajra
+
+# Master Architecture Index
+
+**Document ID:** VAJRA-000
+
+**Version:** 1.0.0
+
+**Status:** Active
+
+**Phase:** Phase 1 – Foundation
+
+**Last Updated:** 26 July 2026
+
+---
+
+# Purpose
+
+The Master Architecture Index serves as the central navigation document for Project Vajra.
+
+It provides a structured overview of every architecture volume, development phase, implementation milestone, and technical dependency within the project.
+
+This document acts as the single source of truth for the overall architecture and development progress.
+
+---
+
+# Project Vision
+
+Project Vajra is an AI-Native Operating Layer (AIOL) designed to transform the interaction between humans and computers.
+
+Rather than treating Artificial Intelligence as an external application, Vajra integrates intelligence directly into the operating environment, allowing users to communicate through goals, natural language, voice, and intelligent automation while leveraging existing operating systems such as Windows, macOS, and Linux.
+
+---
+
+# Development Philosophy
+
+Project Vajra follows an Architecture-First Development Methodology.
+
+Every subsystem follows the lifecycle:
+Architecture
+→ Functional Specification
+→ Technical Specification
+→ Implementation
+→ Testing
+→ Documentation
+→ Release
+
+
+No production code is implemented without an approved architectural specification.
+
+---
+
+# Development Phases
+
+| Phase | Name | Status |
+|--------|------|--------|
+| Phase 1 | Foundation | 🟢 In Progress |
+| Phase 2 | Runtime Engine | ⚪ Planned |
+| Phase 3 | Cognitive Intelligence | ⚪ Planned |
+| Phase 4 | Capability Framework | ⚪ Planned |
+| Phase 5 | Platform Services | ⚪ Planned |
+| Phase 6 | Enterprise Platform | ⚪ Planned |
+| Phase 7 | Robotics & Embedded Systems | ⚪ Planned |
+
+---
+
+# Architecture Volumes
+
+| Volume | Title | Status |
+|---------|-------|--------|
+| Volume 00 | Constitution | 🟢 In Progress |
+| Volume 01 | System Architecture | Planned |
+| Volume 02 | Common Foundations | Planned |
+| Volume 03 | Runtime Architecture | Planned |
+| Volume 04 | Cognitive Architecture | Planned |
+| Volume 05 | Memory Architecture | Planned |
+| Volume 06 | Knowledge Architecture | Planned |
+| Volume 07 | Capability Architecture | Planned |
+| Volume 08 | Agent Architecture | Planned |
+| Volume 09 | Tool Architecture | Planned |
+| Volume 10 | Desktop Architecture | Planned |
+| Volume 11 | Voice Architecture | Planned |
+| Volume 12 | Vision Architecture | Planned |
+| Volume 13 | Plugin Architecture | Planned |
+| Volume 14 | Security Architecture | Planned |
+| Volume 15 | API Architecture | Planned |
+| Volume 16 | Data Architecture | Planned |
+| Volume 17 | Infrastructure Architecture | Planned |
+| Volume 18 | User Experience Architecture | Planned |
+| Volume 19 | Enterprise Architecture | Planned |
+| Volume 20 | Mobile Architecture | Planned |
+| Volume 21 | Robotics Architecture | Planned |
+| Volume 22 | Observability & Operations | Planned |
+| Volume 23 | AI Model Management | Planned |
+| Volume 24 | Testing & Quality | Planned |
+| Volume 25 | Deployment & Release Management | Planned |
+
+---
+
+# Current Milestone
+
+## Current Phase
+
+Phase 1 – Foundation
+
+## Current Objective
+
+Design the complete architectural foundation of Project Vajra before implementation begins.
+
+---
+
+# Repository Structure
+docs/
+src/
+tests/
+configs/
+scripts/
+assets/
+examples/
+
+
+---
+
+# Engineering Principles
+
+- Architecture before implementation
+- Modular design
+- Goal-driven computing
+- Human-centred AI
+- Security by design
+- Privacy by design
+- Extensibility
+- Explainability
+- Platform independence
+- Continuous improvement
+
+---
+
+# Version History
+
+| Version | Date | Description |
+|----------|------|-------------|
+| 1.0.0 | 26 Jul 2026 | Initial Master Architecture Index |
