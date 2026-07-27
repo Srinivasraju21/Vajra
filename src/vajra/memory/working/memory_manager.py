@@ -1,3 +1,4 @@
+
 """
 Working Memory Manager
 
@@ -54,7 +55,7 @@ class MemoryManager:
 
     def get_latest_memory(self):
         """
-        Return the most recently stored memory.
+        Return the latest memory.
         """
 
         if not self.memories:
@@ -64,7 +65,7 @@ class MemoryManager:
 
     def get_memories_by_type(self, memory_type):
         """
-        Return all memories of the specified type.
+        Return memories matching a type.
         """
 
         return [
@@ -75,7 +76,7 @@ class MemoryManager:
 
     def get_memories_by_source(self, source):
         """
-        Return all memories created by the specified source.
+        Return memories matching a source.
         """
 
         return [
@@ -86,7 +87,7 @@ class MemoryManager:
 
     def get_memories_by_status(self, status):
         """
-        Return all memories with the specified status.
+        Return memories matching a status.
         """
 
         return [
@@ -97,25 +98,34 @@ class MemoryManager:
 
     def count_memories(self):
         """
-        Return the total number of memories.
+        Return total number of memories.
         """
 
         return len(self.memories)
 
     def count_by_status(self):
         """
-        Count memories grouped by status.
-
-        Returns:
-            dict: Status counts.
+        Return the number of memories grouped by status.
         """
 
-        return dict(
-            Counter(
-                memory.status
-                for memory in self.memories
-            )
-        )
+        counter = Counter()
+
+        for memory in self.memories:
+            counter[memory.status] += 1
+
+        return dict(counter)
+
+    def count_by_source(self):
+        """
+        Return the number of memories grouped by source.
+        """
+
+        counter = Counter()
+
+        for memory in self.memories:
+            counter[memory.source] += 1
+
+        return dict(counter)
 
     def clear(self):
         """
