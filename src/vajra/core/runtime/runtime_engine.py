@@ -2,11 +2,13 @@
 Runtime Engine
 
 Coordinates task execution by routing Tasks to the
-appropriate Capability and recording execution history.
+appropriate Capability, applying cognitive reasoning,
+and recording execution history.
 """
 
 from vajra.capabilities.registry import CapabilityRegistry
 from vajra.memory.working.memory_manager import MemoryManager
+from vajra.cognitive.reasoning.reasoning_engine import ReasoningEngine
 
 
 class RuntimeEngine:
@@ -25,6 +27,9 @@ class RuntimeEngine:
         # Working Memory used to store execution history.
         self.memory = MemoryManager()
 
+        # Cognitive Engine used for reasoning before execution.
+        self.reasoning = ReasoningEngine()
+
     def execute(self, plan):
         """
         Execute an execution plan.
@@ -36,7 +41,6 @@ class RuntimeEngine:
             list: Results produced by each executed task.
         """
 
-        # Store execution results.
         results = []
 
         # Execute every task in the plan.
@@ -54,7 +58,6 @@ class RuntimeEngine:
                     f"Capability '{task.capability}' not found."
                 )
 
-                # Store failure in Working Memory.
                 self.memory.add_memory(
                     memory_type="execution",
                     source="RuntimeEngine",
@@ -70,10 +73,52 @@ class RuntimeEngine:
 
                 continue
 
-            # Execute the task using the capability.
+            # -------------------------------------
+            # Cognitive Layer
+            # -------------------------------------
+
+            # Generate thought and decision.
+            thought, decision = self.reasoning.reason(task)
+
+            # Store cognitive thought in memory.
+            self.memory.add_memory(
+                memory_type="thought",
+                source=thought.source,
+                content=thought.content,
+                metadata=thought.metadata,
+                status="success",
+            )
+
+            # Check decision approval.
+            if not decision["approved"]:
+
+                rejection_message = (
+                    f"Task rejected: {decision['reason']}"
+                )
+
+                self.memory.add_memory(
+                    memory_type="decision",
+                    source="DecisionEngine",
+                    content=rejection_message,
+                    metadata={
+                        "task": task.action,
+                        "decision": decision["decision"],
+                    },
+                    status="failed",
+                )
+
+                results.append(rejection_message)
+
+                continue
+
+            # -------------------------------------
+            # Execution Layer
+            # -------------------------------------
+
+            # Execute the task using capability.
             result = capability.execute(task)
 
-            # Store successful execution in Working Memory.
+            # Store execution result in memory.
             self.memory.add_memory(
                 memory_type="execution",
                 source=capability.name,
@@ -81,11 +126,11 @@ class RuntimeEngine:
                 metadata={
                     "task": task.action,
                     "capability": task.capability,
+                    "decision": decision["decision"],
                 },
                 status="success",
             )
 
-            # Save the execution result.
             results.append(result)
 
         return results
