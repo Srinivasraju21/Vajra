@@ -1,4 +1,3 @@
-
 """
 Working Memory Manager
 
@@ -105,7 +104,7 @@ class MemoryManager:
 
     def count_by_status(self):
         """
-        Return the number of memories grouped by status.
+        Return memory counts grouped by status.
         """
 
         counter = Counter()
@@ -117,7 +116,7 @@ class MemoryManager:
 
     def count_by_source(self):
         """
-        Return the number of memories grouped by source.
+        Return memory counts grouped by source.
         """
 
         counter = Counter()
@@ -126,6 +125,20 @@ class MemoryManager:
             counter[memory.source] += 1
 
         return dict(counter)
+
+    def generate_report(self):
+        """
+        Generate a Working Memory analytics report.
+
+        Returns:
+            dict: Complete memory summary.
+        """
+
+        return {
+            "total_memories": self.count_memories(),
+            "status_summary": self.count_by_status(),
+            "source_summary": self.count_by_source(),
+        }
 
     def clear(self):
         """
