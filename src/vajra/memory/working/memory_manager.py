@@ -4,6 +4,8 @@ Working Memory Manager
 Stores and retrieves memories created during execution.
 """
 
+from collections import Counter
+
 from vajra.memory.working.memory_object import Memory
 
 
@@ -17,7 +19,6 @@ class MemoryManager:
         Initialise the Working Memory.
         """
 
-        # Store all memory objects here.
         self.memories = []
 
     def add_memory(
@@ -30,16 +31,6 @@ class MemoryManager:
     ):
         """
         Create a new memory and store it.
-
-        Parameters:
-            memory_type (str): Memory category.
-            source (str): Component creating the memory.
-            content (str): Memory description.
-            metadata (dict): Optional extra information.
-            status (str): Success, failure, warning, etc.
-
-        Returns:
-            Memory: Newly created Memory object.
         """
 
         memory = Memory(
@@ -50,7 +41,6 @@ class MemoryManager:
             status=status,
         )
 
-        # Save memory into Working Memory.
         self.memories.append(memory)
 
         return memory
@@ -58,16 +48,78 @@ class MemoryManager:
     def get_all_memories(self):
         """
         Return every stored memory.
-
-        Returns:
-            list: List of Memory objects.
         """
 
         return self.memories
 
+    def get_latest_memory(self):
+        """
+        Return the most recently stored memory.
+        """
+
+        if not self.memories:
+            return None
+
+        return self.memories[-1]
+
+    def get_memories_by_type(self, memory_type):
+        """
+        Return all memories of the specified type.
+        """
+
+        return [
+            memory
+            for memory in self.memories
+            if memory.memory_type == memory_type
+        ]
+
+    def get_memories_by_source(self, source):
+        """
+        Return all memories created by the specified source.
+        """
+
+        return [
+            memory
+            for memory in self.memories
+            if memory.source == source
+        ]
+
+    def get_memories_by_status(self, status):
+        """
+        Return all memories with the specified status.
+        """
+
+        return [
+            memory
+            for memory in self.memories
+            if memory.status == status
+        ]
+
+    def count_memories(self):
+        """
+        Return the total number of memories.
+        """
+
+        return len(self.memories)
+
+    def count_by_status(self):
+        """
+        Count memories grouped by status.
+
+        Returns:
+            dict: Status counts.
+        """
+
+        return dict(
+            Counter(
+                memory.status
+                for memory in self.memories
+            )
+        )
+
     def clear(self):
         """
-        Remove every memory from Working Memory.
+        Remove every memory.
         """
 
         self.memories.clear()
