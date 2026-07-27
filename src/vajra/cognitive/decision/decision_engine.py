@@ -1,7 +1,8 @@
 """
 Decision Engine
 
-Makes execution decisions based on generated thoughts.
+Makes execution decisions based on thoughts
+and learned knowledge.
 """
 
 
@@ -14,28 +15,50 @@ class DecisionEngine:
         """
         Initialise the Decision Engine.
         """
+
         self.minimum_confidence = 0.80
 
-    def decide(self, thought):
+
+    def decide(self, thought, knowledge=None):
         """
         Decide whether to execute a task.
 
         Parameters:
-            thought: Thought object.
+            thought:
+                Thought object.
+
+            knowledge:
+                List of Knowledge objects.
 
         Returns:
-            dict: Decision result.
+            dict:
+                Decision result.
         """
 
-        if thought.confidence >= self.minimum_confidence:
+
+        confidence = thought.confidence
+
+
+        # Increase confidence when previous knowledge exists.
+        if knowledge:
+
+            confidence += 0.05
+
+
+        if confidence >= self.minimum_confidence:
 
             return {
                 "decision": "execute",
                 "approved": True,
                 "reason": (
+                    "Confidence meets execution threshold "
+                    "with knowledge support."
+                    if knowledge
+                    else
                     "Confidence meets execution threshold."
                 ),
             }
+
 
         return {
             "decision": "reject",

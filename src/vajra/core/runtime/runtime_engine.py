@@ -3,11 +3,15 @@ Runtime Engine
 
 Coordinates task execution by routing Tasks to the
 appropriate Capability, applying cognitive reasoning,
-and recording execution history.
+managing memory, managing knowledge, and recording execution history.
 """
 
 from vajra.capabilities.registry import CapabilityRegistry
+
 from vajra.memory.working.memory_manager import MemoryManager
+
+from vajra.knowledge.manager.knowledge_manager import KnowledgeManager
+
 from vajra.cognitive.reasoning.reasoning_engine import ReasoningEngine
 
 
@@ -27,36 +31,45 @@ class RuntimeEngine:
         # Working Memory used to store execution history.
         self.memory = MemoryManager()
 
+        # Knowledge Manager stores learned information.
+        self.knowledge = KnowledgeManager()
+
         # Cognitive Engine used for reasoning before execution.
-        self.reasoning = ReasoningEngine()
+        self.reasoning = ReasoningEngine(
+            knowledge_manager=self.knowledge
+        )
+
 
     def execute(self, plan):
         """
         Execute an execution plan.
 
         Parameters:
-            plan (list): List of Task objects.
+            plan (list):
+                List of Task objects.
 
         Returns:
-            list: Results produced by each executed task.
+            list:
+                Results produced by each executed task.
         """
 
         results = []
 
-        # Execute every task in the plan.
+
         for task in plan:
 
-            # Find the required capability.
+            # Find required capability.
             capability = self.registry.get_capability(
                 task.capability
             )
 
-            # Capability not registered.
+
             if capability is None:
 
                 error_message = (
                     f"Capability '{task.capability}' not found."
                 )
+
 
                 self.memory.add_memory(
                     memory_type="execution",
@@ -69,18 +82,21 @@ class RuntimeEngine:
                     status="failed",
                 )
 
+
                 results.append(error_message)
 
                 continue
 
-            # -------------------------------------
+
+            # -------------------------------
             # Cognitive Layer
-            # -------------------------------------
+            # -------------------------------
 
-            # Generate thought and decision.
-            thought, decision = self.reasoning.reason(task)
+            thought, decision = self.reasoning.reason(
+                task
+            )
 
-            # Store cognitive thought in memory.
+
             self.memory.add_memory(
                 memory_type="thought",
                 source=thought.source,
@@ -89,12 +105,13 @@ class RuntimeEngine:
                 status="success",
             )
 
-            # Check decision approval.
+
             if not decision["approved"]:
 
                 rejection_message = (
                     f"Task rejected: {decision['reason']}"
                 )
+
 
                 self.memory.add_memory(
                     memory_type="decision",
@@ -107,18 +124,22 @@ class RuntimeEngine:
                     status="failed",
                 )
 
-                results.append(rejection_message)
+
+                results.append(
+                    rejection_message
+                )
 
                 continue
 
-            # -------------------------------------
-            # Execution Layer
-            # -------------------------------------
 
-            # Execute the task using capability.
+
+            # -------------------------------
+            # Execution Layer
+            # -------------------------------
+
             result = capability.execute(task)
 
-            # Store execution result in memory.
+
             self.memory.add_memory(
                 memory_type="execution",
                 source=capability.name,
@@ -131,16 +152,24 @@ class RuntimeEngine:
                 status="success",
             )
 
+
             results.append(result)
 
+
         return results
+
 
     def get_execution_history(self):
         """
         Return all execution memories.
-
-        Returns:
-            list: Memory objects stored during execution.
         """
 
         return self.memory.get_all_memories()
+
+
+    def get_knowledge(self):
+        """
+        Return all learned knowledge.
+        """
+
+        return self.knowledge.get_all_knowledge()
