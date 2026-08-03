@@ -1,58 +1,106 @@
 """
-System Capability
+File Manager Capability
 
-Handles Vajra's internal system operations.
+Handles filesystem operations
+inside Vajra.
 """
 
+
 from vajra.capabilities.capability import Capability
+from vajra.capabilities.result import CapabilityResult
+from vajra.capabilities.risk import RiskLevel
 
 
-class SystemManager(Capability):
+
+class FileManager(Capability):
     """
-    Performs internal system tasks.
+    Provides filesystem related capabilities.
     """
+
 
     def __init__(self):
-        """
-        Initialise the System capability.
-        """
 
         super().__init__(
-            "system",
-            "Handles Vajra internal system operations"
+            "filesystem",
+            "Handles filesystem operations"
         )
+
+
 
     def execute(self, task):
         """
-        Execute an internal system task.
-
-        Parameters:
-            task: Task object.
-
-        Returns:
-            Result of execution.
+        Execute filesystem tasks.
         """
 
-        if task.action == "prepare_environment":
 
-            return self.prepare_environment()
+        if task.action == "create_directory":
 
-        elif task.action == "validate_execution":
+            directory_name = (
+                task.parameters
+                .get("directory_name")
+            )
 
-            return self.validate_execution()
 
-        return f"Unsupported system action: {task.action}"
+            return self.create_directory(
+                directory_name
+            )
 
-    def prepare_environment(self):
+
+        return CapabilityResult(
+            success=False,
+            message=(
+                f"Unsupported filesystem action: "
+                f"{task.action}"
+            )
+        )
+
+
+
+    def create_directory(
+        self,
+        directory_name
+    ):
         """
-        Prepare Vajra before execution begins.
+        Create a directory.
         """
 
-        return "Environment prepared successfully."
 
-    def validate_execution(self):
-        """
-        Validate execution after all tasks complete.
-        """
+        import os
 
-        return "Execution validated successfully."
+
+        try:
+
+            os.makedirs(
+                directory_name,
+                exist_ok=True
+            )
+
+
+            return CapabilityResult(
+                success=True,
+
+                message=(
+                    f"Directory "
+                    f"{directory_name} "
+                    f"created successfully."
+                ),
+
+                data={
+                    "risk":
+                        RiskLevel.REVERSIBLE.value,
+
+                    "operation":
+                        "create_directory",
+
+                    "directory":
+                        directory_name
+                }
+            )
+
+
+        except Exception as error:
+
+            return CapabilityResult(
+                success=False,
+                message=str(error)
+            )
