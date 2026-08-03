@@ -10,27 +10,33 @@ class Capability:
     Base class for all Vajra capabilities.
     """
 
-    def __init__(self, name):
+    def __init__(
+        self,
+        name,
+        description
+    ):
         """
-        Initialise the capability.
+        Initialise capability.
 
         Parameters:
-            name (str): Human-readable capability name.
+            name (str):
+                Capability identifier
+
+            description (str):
+                What this capability does
         """
+
         self.name = name
+        self.description = description
+
 
     def execute(self, task):
         """
-        Execute a Task.
+        Execute a task.
 
-        Every capability must implement this method.
-
-        Parameters:
-            task: Task object received from the Runtime Engine.
-
-        Returns:
-            Execution result.
+        Every capability must implement this.
         """
+
         raise NotImplementedError(
             "Capability must implement execute(task)."
         )

@@ -1,53 +1,58 @@
 """
-File System Capability
+System Capability
 
-Provides Vajra with the ability to interact
-with the local file system.
+Handles Vajra's internal system operations.
 """
-
-import os
 
 from vajra.capabilities.capability import Capability
 
 
-class FileManager(Capability):
+class SystemManager(Capability):
     """
-    Handles all file system operations.
+    Performs internal system tasks.
     """
 
     def __init__(self):
         """
-        Initialise the File System capability.
+        Initialise the System capability.
         """
-        super().__init__("filesystem")
+
+        super().__init__(
+            "system",
+            "Handles Vajra internal system operations"
+        )
 
     def execute(self, task):
         """
-        Execute a filesystem task.
+        Execute an internal system task.
 
         Parameters:
             task: Task object.
 
         Returns:
-            Result of the executed operation.
+            Result of execution.
         """
 
-        if task.action == "create_directory":
+        if task.action == "prepare_environment":
 
-            return self.create_directory(
-                task.parameters["directory_name"]
-            )
+            return self.prepare_environment()
 
-        return f"Unsupported filesystem action: {task.action}"
+        elif task.action == "validate_execution":
 
-    def create_directory(self, directory_name):
+            return self.validate_execution()
+
+        return f"Unsupported system action: {task.action}"
+
+    def prepare_environment(self):
         """
-        Create a directory if it does not exist.
+        Prepare Vajra before execution begins.
         """
 
-        if os.path.exists(directory_name):
-            return f"Directory already exists: {directory_name}"
+        return "Environment prepared successfully."
 
-        os.makedirs(directory_name)
+    def validate_execution(self):
+        """
+        Validate execution after all tasks complete.
+        """
 
-        return f"Directory created successfully: {directory_name}"
+        return "Execution validated successfully."
