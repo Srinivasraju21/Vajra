@@ -1,115 +1,161 @@
 """
 Vajra Reflection Engine
 
-Analyzes mission outcomes
-and generates learning feedback.
-"""
+Analyzes completed executions and
+creates insights for adaptive learning.
 
+Flow:
+
+Execution Result
+
+        ↓
+
+Reflection Engine
+
+        ↓
+
+Insight
+
+        ↓
+
+Adaptive Engine
+"""
 
 
 class ReflectionEngine:
     """
-    Evaluates completed missions.
+    Creates reflections from completed missions.
 
-    Converts execution results
-    into learning insights.
+    Reflection answers:
+
+    - Did the task succeed?
+    - What happened?
+    - What should Vajra learn?
     """
 
 
 
-    def __init__(self):
+    def __init__(
+        self
+    ):
+        """
+        Initialize reflection storage.
+        """
 
-        # Store reflection history
+
+        # Stores all generated reflections.
+
         self.reflections = []
+
+
 
 
 
     def reflect(
         self,
-        mission
+        mission,
+        result
     ):
         """
-        Analyze mission outcome.
+        Analyze execution result.
+
+
+        Args:
+
+            mission:
+                Completed objective
+
+
+            result:
+                Execution output
+
+
+        Returns:
+
+            Reflection object
         """
 
+
+
+        # Determine success.
 
         success = (
 
-            mission.state.value
-            ==
-            "completed"
+            result.get(
+                "success",
+                False
+            )
 
         )
 
 
+
+        # Create learning insight.
+
+        if success:
+
+            insight = (
+
+                "Mission completed successfully. "
+                "Current strategy is effective."
+
+            )
+
+        else:
+
+            insight = (
+
+                "Mission failed. "
+                "Strategy requires improvement."
+
+            )
+
+
+
+        # Create reflection object.
+
         reflection = {
 
+
             "mission":
-                mission.name,
 
+                mission,
 
-            "objective":
-                mission.objective,
 
 
             "success":
+
                 success,
 
 
-            "agents":
 
-                [
-                    agent.name
-                    for agent
-                    in mission.agents
-                ],
+            "result":
 
+                result,
 
-            "results":
-                mission.results,
 
 
             "insight":
 
-                self.generate_insight(
-                    success
-                )
+                insight
 
         }
 
 
+
+        # Store reflection history.
+
         self.reflections.append(
+
             reflection
+
         )
+
 
 
         return reflection
 
 
-
-    def generate_insight(
-        self,
-        success
-    ):
-        """
-        Generate learning message.
-        """
-
-
-        if success:
-
-            return (
-                "Mission completed successfully. "
-                "Current strategy is effective."
-            )
-
-
-        return (
-
-            "Mission failed. "
-            "Strategy improvement required."
-
-        )
 
 
 
@@ -119,5 +165,6 @@ class ReflectionEngine:
         """
         Return previous reflections.
         """
+
 
         return self.reflections
