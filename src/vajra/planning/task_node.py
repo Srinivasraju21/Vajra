@@ -1,34 +1,28 @@
 """
 Task Node
 
-Represents an individual node
-inside Vajra's Task Graph.
+Represents an individual task
+inside Vajra's execution graph.
 """
-
 
 from dataclasses import dataclass, field
 
 from vajra.planning.planned_task import PlannedTask
 
 
-
 @dataclass
 class TaskNode:
     """
-    Node representation of a planned task.
+    Represents a node in the Task Graph.
     """
 
-
     task: PlannedTask
-
 
     dependencies: list["TaskNode"] = field(
         default_factory=list
     )
 
-
     completed: bool = False
-
 
 
     def add_dependency(
@@ -36,10 +30,10 @@ class TaskNode:
         task_node: "TaskNode"
     ):
         """
-        Add a dependency.
+        Add dependency relationship.
 
-        The current task will wait
-        until this dependency completes.
+        The current task waits until
+        the dependency completes.
         """
 
         self.dependencies.append(
@@ -47,11 +41,12 @@ class TaskNode:
         )
 
 
-
     def is_ready(self):
         """
-        Check whether this task
-        can execute.
+        Check if task can execute.
+
+        A task is ready only when
+        all dependencies are completed.
         """
 
         return all(
