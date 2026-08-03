@@ -1,41 +1,41 @@
 """
 Feedback Manager
 
-Connects execution feedback
-with Vajra knowledge system.
+Converts execution results into
+Knowledge objects and stores them
+inside the Knowledge Manager.
 """
-
 
 from vajra.core.learning.execution_analyzer import (
     ExecutionAnalyzer
 )
 
+from vajra.knowledge.base.knowledge import (
+    Knowledge
+)
 
 
 class FeedbackManager:
     """
-    Manages execution feedback
-    and learning updates.
+    Processes execution feedback and
+    stores learned experiences.
     """
-
 
     def __init__(
         self,
         knowledge_manager
     ):
         """
-        Initialize feedback manager.
+        Initialise Feedback Manager.
         """
 
         self.knowledge_manager = (
             knowledge_manager
         )
 
-        self.analyzer = (
+        self.execution_analyzer = (
             ExecutionAnalyzer()
         )
-
-
 
     def process_feedback(
         self,
@@ -43,24 +43,43 @@ class FeedbackManager:
         source="runtime"
     ):
         """
-        Process execution result
-        and store learning experience.
+        Convert execution result into
+        a Knowledge object.
         """
 
-
         learning_event = (
-            self.analyzer
-            .analyze(result)
+            self.execution_analyzer.analyze(
+                result
+            )
         )
 
+        knowledge = Knowledge(
+
+            knowledge_type="experience",
+
+            source=source,
+
+            content=learning_event["message"],
+
+            confidence=1.0,
+
+            metadata={
+
+                "event":
+                    learning_event["event"],
+
+                "status":
+                    learning_event["status"],
+
+                "confidence_change":
+                    learning_event[
+                        "confidence_change"
+                    ]
+            }
+        )
 
         self.knowledge_manager.add_knowledge(
-
-            learning_event,
-
-            source
-
+            knowledge
         )
 
-
-        return learning_event
+        return knowledge
