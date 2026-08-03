@@ -30,14 +30,16 @@ class MissionState(Enum):
 
 
 
+
+
 class Mission:
     """
     Represents a Vajra mission.
 
     A mission is a higher-level
-    objective that can involve
-    multiple autonomous agents.
+    objective involving autonomous agents.
     """
+
 
 
     def __init__(
@@ -45,35 +47,30 @@ class Mission:
         name,
         objective
     ):
-        """
-        Initialize mission.
-        """
 
-
-        # Unique mission identifier
         self.id = str(
             uuid.uuid4()
         )
 
 
-        # Mission details
         self.name = name
 
         self.objective = objective
 
 
-        # Agents assigned
         self.agents = []
 
 
-        # Execution results
         self.results = []
 
 
-        # Initial state
         self.state = (
+
             MissionState.CREATED
+
         )
+
+
 
 
 
@@ -82,7 +79,7 @@ class Mission:
         agent
     ):
         """
-        Assign agent to mission.
+        Assign agent.
         """
 
         self.agents.append(
@@ -91,36 +88,47 @@ class Mission:
 
 
 
-    def start_planning(self):
-        """
-        Move mission to planning.
-        """
+
+
+    def start_planning(
+        self
+    ):
 
         self.state = (
+
             MissionState.PLANNING
+
         )
 
 
 
-    def assign_agents(self):
-        """
-        Mark agents assigned.
-        """
+
+
+    def assign_agents(
+        self
+    ):
 
         self.state = (
+
             MissionState.ASSIGNED
+
         )
 
 
 
-    def start_execution(self):
-        """
-        Start execution.
-        """
+
+
+    def start_execution(
+        self
+    ):
 
         self.state = (
+
             MissionState.EXECUTING
+
         )
+
+
 
 
 
@@ -130,57 +138,103 @@ class Mission:
     ):
         """
         Complete mission.
+
+        Finalizes agent states
+        and stores final results.
         """
 
-        self.results = (
-            results
-            if results
-            else []
-        )
+
+        # Complete all agents
+
+        for agent in self.agents:
+
+
+            if hasattr(
+                agent,
+                "complete"
+            ):
+
+                agent.complete()
+
+
+
+        # Store ONLY final agent states
+
+        self.results = [
+
+            agent.get_info()
+
+            for agent in self.agents
+
+        ]
+
 
 
         self.state = (
+
             MissionState.COMPLETED
+
         )
 
 
 
-    def fail(self):
-        """
-        Mark mission failed.
-        """
+
+
+    def fail(
+        self
+    ):
 
         self.state = (
+
             MissionState.FAILED
+
         )
 
 
 
-    def get_info(self):
-        """
-        Return mission information.
-        """
+
+
+    def get_info(
+        self
+    ):
 
         return {
 
+
             "id":
+
                 self.id,
 
+
             "name":
+
                 self.name,
 
+
             "objective":
+
                 self.objective,
 
+
             "state":
+
                 self.state.value,
 
+
             "agents":
+
                 [
+
                     agent.name
-                    for agent in self.agents
+
+                    for agent
+                    in self.agents
+
                 ],
 
+
             "results":
+
                 self.results
+
         }

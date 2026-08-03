@@ -2,7 +2,8 @@
 Vajra Adaptive Intelligence Engine
 
 Coordinates reflection,
-ranking and strategy learning.
+capability ranking,
+and strategy learning.
 """
 
 
@@ -22,11 +23,12 @@ from vajra.adaptive.strategy.strategy_manager import (
 
 
 
-
 class AdaptiveEngine:
     """
-    Central intelligence layer
-    responsible for learning.
+    Central adaptive intelligence layer.
+
+    Learns from mission execution
+    and improves future decisions.
     """
 
 
@@ -34,19 +36,32 @@ class AdaptiveEngine:
     def __init__(
         self
     ):
+        """
+        Initialize adaptive components.
+        """
 
-        self.reflection = (
+
+        # Analyzes mission outcomes
+        self.reflection_engine = (
+
             ReflectionEngine()
+
         )
 
 
-        self.ranker = (
+        # Tracks agent/capability performance
+        self.capability_ranker = (
+
             CapabilityRanker()
+
         )
 
 
-        self.strategy = (
+        # Stores and evaluates strategies
+        self.strategy_manager = (
+
             StrategyManager()
+
         )
 
 
@@ -57,6 +72,19 @@ class AdaptiveEngine:
     ):
         """
         Learn from completed mission.
+
+        Flow:
+
+        Mission Result
+              |
+              ↓
+        Reflection
+              |
+              ↓
+        Ranking Update
+              |
+              ↓
+        Strategy Update
         """
 
 
@@ -64,68 +92,93 @@ class AdaptiveEngine:
 
         reflection = (
 
-            self.reflection.reflect(
+            self.reflection_engine
+            .reflect(
                 mission
             )
 
         )
 
 
+        success = (
 
-        # Update agent performance
-
-        for agent in mission.agents:
-
-
-            self.ranker.record_execution(
-
-                capability_name=
-                agent.name,
-
-
-                success=
-                reflection["success"]
-
-            )
-
-
-
-        # Update strategy
-
-        self.strategy.record_result(
-
-            strategy_name=
-            "default_strategy",
-
-
-            success=
             reflection["success"]
 
         )
 
 
 
+        # Update capability performance
+
+        for agent in mission.agents:
+
+
+            self.capability_ranker.record_execution(
+
+                capability_name=
+
+                agent.name,
+
+
+                success=
+
+                success
+
+            )
+
+
+
+        # Update strategy performance
+
+        self.strategy_manager.record_result(
+
+            strategy_name=
+
+            "default_strategy",
+
+
+            success=
+
+            success
+
+        )
+
+
         return reflection
 
 
 
-    def get_recommendation(
+    def get_learning_state(
         self
     ):
         """
-        Provide future strategy.
+        Return current adaptive intelligence state.
+
+        Includes:
+
+        - Reflection history
+        - Capability rankings
+        - Strategy performance
         """
 
 
         return {
 
-            "best_strategy":
-                self.strategy
-                .recommend_strategy(),
+            "reflections":
+
+                self.reflection_engine
+                .get_reflections(),
 
 
             "capability_ranking":
-                self.ranker
-                .get_ranking()
+
+                self.capability_ranker
+                .get_ranking(),
+
+
+            "strategies":
+
+                self.strategy_manager
+                .get_all_strategies()
 
         }
