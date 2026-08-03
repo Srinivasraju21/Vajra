@@ -4,8 +4,8 @@ Execution Scheduler
 Controls the order and availability
 of task execution inside Vajra.
 
-The scheduler does not execute tasks.
-It prepares tasks for the Runtime Engine.
+The scheduler prepares tasks
+for the Runtime Engine.
 """
 
 
@@ -17,8 +17,8 @@ from vajra.planning.dependency_resolver import (
 
 class ExecutionScheduler:
     """
-    Responsible for selecting
-    executable tasks from the task graph.
+    Selects tasks that are ready
+    for execution.
     """
 
 
@@ -30,23 +30,21 @@ class ExecutionScheduler:
         Initialize scheduler.
 
         Parameters:
-
             resolver:
-                DependencyResolver instance
-                responsible for understanding
-                task dependencies.
+                DependencyResolver instance.
         """
 
-        # Store dependency resolver.
-        # Scheduler uses this information
-        # to know which tasks are ready.
+        # Scheduler depends on the resolver
+        # to understand task dependencies
+        # and execution readiness.
         self.resolver = resolver
+
 
 
     def get_next_tasks(self):
         """
         Returns tasks that are ready
-        for execution.
+        to execute.
         """
 
         return (
@@ -55,10 +53,11 @@ class ExecutionScheduler:
         )
 
 
+
     def has_pending_tasks(self):
         """
         Checks whether unfinished
-        tasks remain.
+        tasks exist.
         """
 
         return (
