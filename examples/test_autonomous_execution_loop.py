@@ -18,57 +18,90 @@ from vajra.planning.risk import (
 def main():
 
     print("=" * 60)
-    print("VAJRA AUTONOMOUS EXECUTION LOOP TEST")
+    print("VAJRA AUTONOMOUS LEARNING TEST")
     print("=" * 60)
 
     runtime = RuntimeEngine()
 
-    loop = (
-        AutonomousExecutionLoop(
-            runtime
-        )
+    loop = AutonomousExecutionLoop(
+        runtime
     )
 
     tasks = [
 
         PlannedTask(
+
             name="system",
+
             action="prepare_environment",
+
             risk=RiskLevel.READ_ONLY
+
         ),
 
         PlannedTask(
+
             name="filesystem",
+
             action="create_directory",
+
             risk=RiskLevel.REVERSIBLE,
+
             parameters={
+
                 "directory_name":
-                "vajra_autonomous_demo"
+                "vajra_learning_demo"
+
             }
+
         )
 
     ]
 
-    print("\nExecuting Plan...")
-    print("-" * 40)
+    print("\nExecuting...\n")
 
-    results = (
-        loop.execute(
-            tasks
-        )
-    )
+    results = loop.execute(tasks)
 
-    print("\nExecution Results")
-    print("-" * 40)
+    print("=" * 60)
+    print("EXECUTION RESULTS")
+    print("=" * 60)
 
     for result in results:
 
         print(result)
 
-    print("\nTEST PASSED")
+    print()
+
+    print("=" * 60)
+    print("KNOWLEDGE")
+    print("=" * 60)
+
+    for knowledge in loop.get_knowledge():
+
+        print(knowledge)
+
+    print()
+
+    print("=" * 60)
+    print("RELIABILITY")
+    print("=" * 60)
+
+    report = loop.get_reliability_report()
+
+    for capability, stats in report.items():
+
+        print(capability)
+
+        print(stats)
+
+        print()
+
+    print("=" * 60)
+    print("AUTONOMOUS LOOP COMPLETE")
     print("=" * 60)
 
 
 if __name__ == "__main__":
+
     main()
     
